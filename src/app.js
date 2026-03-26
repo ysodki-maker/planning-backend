@@ -19,13 +19,30 @@ const app  = express();
 const PORT = process.env.PORT || 5000;
 
 // ── Sécurité ──────────────────────────────────────────────────────────────────
-app.use(helmet());
-app.use(cors({
-  origin:      process.env.CLIENT_URL || 'https://planning.cosinus.ma',
+app.use(helmet({ crossOriginResourcePolicy: false }));
+
+const allowedOrigins = (process.env.CLIENT_URL || 'https://planning.cosinus.ma').split(',');
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Autoriser les requêtes sans origin (Postman, server-to-server, etc.)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Non autorisé par CORS'));
+    }
+  },
   credentials: true,
   methods:     ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+};
+
+app.use(cors(corsOptions));
+
+// ✅ Preflight handler — doit être placé AVANT les routes
+app.options('*', cors(corsOptions));
 
 // ── Rate limiting ─────────────────────────────────────────────────────────────
 const globalLimiter = rateLimit({
@@ -67,7 +84,7 @@ app.get('/health', (req, res) => {
 });
 
 // ── Routes API ────────────────────────────────────────────────────────────────
-app.use('/api/auth', authRoutes);
+app.use('/api/auth',     authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/users',    userRoutes);
 

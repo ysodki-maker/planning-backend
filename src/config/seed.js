@@ -26,11 +26,12 @@ async function seed() {
     `);
 
     await conn.query(`
-      INSERT INTO projects (name, ville, status, type, start_date, end_date, heure_debut, heure_fin, description, created_by) VALUES
-        ('Rénovation Siège Social',        'Casablanca', 'En cours',               'Relevé',       '2025-03-01','2025-06-30','08:00','12:00','Travaux de rénovation complète du siège.', 1),
-        ('Aménagement Espace Coworking',   'Rabat',      'Demande d''affectation', 'Installation', '2025-04-15','2025-07-20','13:00','17:00','Création d''un espace de coworking moderne.', 1),
-        ('Construction Entrepôt',          'Tanger',     'Terminé',                'Relevé',       '2024-11-01','2025-02-28','09:00','15:00','Entrepôt logistique 5000m².', 1),
-        ('Installation Panneaux Solaires', 'Marrakech',  'En cours',               'Installation', '2025-05-01','2025-08-15','07:30','11:30','Installation photovoltaïque – 200kWc.', 1)
+      INSERT INTO projects (name, ville, status, type, start_date, end_date, heure_debut, heure_fin, localisation, description, created_by) VALUES
+        ('Relevé Villa Californie',          'Casablanca', 'Terminé',                'Relevé',       '2025-03-02','2025-03-03','09:00','12:00','Villa Californie, Bd de la Corniche, Casablanca',  'Relevé dimensions salon et chambres.', 1),
+        ('Installation Showroom BMW',        'Casablanca', 'En cours',               'Installation', '2025-04-07','2025-04-18','08:00','17:00','Showroom BMW, Route de Nouaceur, Sidi Maarouf',    'Revêtement mural haut de gamme.', 1),
+        ('Relevé Appartement Hay Riad',      'Rabat',      'Terminé',                'Relevé',       '2025-03-10',NULL,        '10:00','12:30','Résidence Hay Riad, Bloc B Appt 14, Rabat',        'Relevé pré-installation papier peint.', 1),
+        ('Installation Hôtel Sofitel',       'Marrakech',  'En cours',               'Installation', '2025-04-14','2025-04-25','07:00','13:00','Hôtel Sofitel Marrakech, Rue Harroun Errachid',    'Papier peint panoramique lobby et suites.', 1),
+        ('Relevé Bureau Technopark',         'Casablanca', 'Demande d''affectation', 'Relevé',       NULL,        NULL,        '14:00','16:00','Technopark Casablanca, Bât C Open Space',          'Relevé open space 400m².', 1)
     `);
 
     await conn.query(`

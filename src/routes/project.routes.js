@@ -20,13 +20,20 @@ const projectValidation = [
   body('type')
     .isIn(['Relevé', 'Installation'])
     .withMessage('Type invalide. Valeurs acceptées : Relevé, Installation.'),
-  body('start_date').isDate().withMessage('Date de début invalide (YYYY-MM-DD).'),
+  body('start_date')
+    .optional({ nullable: true, checkFalsy: true })
+    .isDate().withMessage('Date de début invalide (YYYY-MM-DD).'),
   body('end_date')
+    .optional({ nullable: true, checkFalsy: true })
     .isDate().withMessage('Date de fin invalide (YYYY-MM-DD).')
     .custom((end, { req }) => {
-      if (end < req.body.start_date) throw new Error('La date de fin doit être après la date de début.');
+      if (end && req.body.start_date && end < req.body.start_date)
+        throw new Error('La date de fin doit être après la date de début.');
       return true;
     }),
+  body('localisation')
+    .optional({ nullable: true, checkFalsy: true })
+    .isLength({ max: 500 }).withMessage('Localisation trop longue (max 500 car.).'),
   body('heure_debut')
     .optional({ nullable: true, checkFalsy: true })
     .matches(timeRegex).withMessage('Heure de début invalide (format HH:MM).'),
@@ -48,8 +55,9 @@ const updateValidation = [
   body('ville').optional().trim().notEmpty().isLength({ max: 150 }),
   body('status').optional().isIn(["Demande d'affectation", 'En cours', 'Terminé']),
   body('type').optional().isIn(['Relevé', 'Installation']),
-  body('start_date').optional().isDate(),
-  body('end_date').optional().isDate(),
+  body('start_date').optional({ nullable: true, checkFalsy: true }).isDate(),
+  body('end_date').optional({ nullable: true, checkFalsy: true }).isDate(),
+  body('localisation').optional({ nullable: true, checkFalsy: true }).isLength({ max: 500 }),
   body('heure_debut')
     .optional({ nullable: true, checkFalsy: true })
     .matches(timeRegex).withMessage('Heure de début invalide (format HH:MM).'),

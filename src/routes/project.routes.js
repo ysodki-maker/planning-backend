@@ -77,6 +77,14 @@ router.post('/',    authorize('admin'), projectValidation, projectController.cre
 router.put('/:id',  authorize('admin'), updateValidation,  projectController.update);
 router.delete('/:id', authorize('admin'), projectController.delete);
 
+// Confirmation de projet
+// GET  sans auth → lien email : redirige vers page front formulaire
+// POST sans auth + token → soumission formulaire depuis lien email
+// POST avec auth (admin) → bouton dans l'app
+router.get('/confirm', projectController.confirmProject);
+router.post('/confirm', projectController.confirmProject);
+router.post('/:id/confirm', authenticate, authorize('admin'), projectController.confirmProject);
+
 router.post('/:id/assign', authorize('admin'), [
   body('user_ids').isArray({ min: 1 }).withMessage('Fournissez au moins un utilisateur.'),
   validate,

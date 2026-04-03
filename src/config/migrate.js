@@ -32,8 +32,11 @@ const migrations = [
     heure_debut  TIME                NULL,
     heure_fin    TIME                NULL,
     localisation TEXT                NULL,
-    description  TEXT                NULL,
-    created_by   INT UNSIGNED        NOT NULL,
+    description    TEXT                NULL,
+    confirm_token  VARCHAR(128)        NULL UNIQUE,
+    confirmed_at   DATETIME            NULL,
+    confirmed_by   INT UNSIGNED        NULL,
+    created_by     INT UNSIGNED        NOT NULL,
     created_at   DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at   DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_projects_created_by FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE RESTRICT
